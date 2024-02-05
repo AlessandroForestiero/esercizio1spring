@@ -9,44 +9,41 @@ import java.util.List;
 
 @Configuration
 public class AppConfig {
-    @Bean("pizza1")
+    @Bean("margherita")
     @Scope("prototype")
-    public Alimento getPizza1() {
-        Alimento pizza = new Pizza();
+    public Pizza getMargherita() {
+        Pizza pizza = new Pizza();
         pizza.setNome("margherita");
-        pizza.setCalorie(300);
-        pizza.setPrezzo(10);
-       // pizza=new Pomodoro(new Mozzarella(pizza));
-        Pomodoro pomodoro=new Pomodoro();
-        pomodoro.setNome("pomodoro");
-        System.out.println(pomodoro);
+        pizza.setCalorie(getMozzarella().getCalorie() + getPomodoro().getCalorie());
+        pizza.setPrezzo(getMozzarella().getPrezzo() + getPomodoro().getPrezzo());
+        pizza.setToppings(List.of(getPomodoro(), getMozzarella()));
         return pizza;
     }
 
-    @Bean("pizza2")
-    @Scope("prototype")
-    public Alimento getPizza2() {
-        Alimento pizza = new Pizza();
+    @Bean("diavola")
+
+    public Pizza getDiavola() {
+        Pizza pizza = getMargherita();
         pizza.setNome("diavola");
-        pizza.setCalorie(400);
-        pizza.setPrezzo(20);
-        pizza=new Pomodoro(new Mozzarella(new Salame(pizza)));
+        pizza.setCalorie(pizza.getCalorie() + getSalame().getCalorie());
+        pizza.setPrezzo(pizza.getPrezzo() + getSalame().getPrezzo());
+        pizza.getToppings().add(getSalame());
         return pizza;
     }
 
-    @Bean("pizza3")
-    @Scope("prototype")
-    public Alimento getPizza3() {
-        Alimento pizza = new Pizza();
+    @Bean("capricciosa")
+
+    public Pizza capricciosa() {
+        Pizza pizza = getMargherita();
         pizza.setNome("capricciosa");
-        pizza.setCalorie(500);
-        pizza.setPrezzo(30);
-        pizza=new Pomodoro(new Mozzarella(new Salame(new Uovo(pizza))));
+        pizza.setCalorie(pizza.getCalorie() + getUovo().getCalorie());
+        pizza.setPrezzo(pizza.getPrezzo() + getUovo().getPrezzo());
+        pizza.getToppings().add(getUovo());
         return pizza;
     }
 
     @Bean("bevanda1")
-    @Scope("prototype")
+
     public Bevanda getBevanda1() {
         Bevanda bevanda = new Bevanda();
         bevanda.setNome("coca-cola");
@@ -56,7 +53,7 @@ public class AppConfig {
     }
 
     @Bean("bevanda2")
-    @Scope("prototype")
+
     public Bevanda getBevanda2() {
         Bevanda bevanda = new Bevanda();
         bevanda.setNome("fanta");
@@ -65,8 +62,8 @@ public class AppConfig {
         return bevanda;
     }
 
-    @Bean("bevanda1")
-    @Scope("prototype")
+    @Bean("bevanda3")
+
     public Bevanda getBevanda3() {
         Bevanda bevanda = new Bevanda();
         bevanda.setNome("birra");
@@ -76,9 +73,9 @@ public class AppConfig {
     }
 
     @Bean("mozzarella")
-    @Scope("prototype")
-    public Alimento getMozzarella() {
-        Alimento mozzarella = new Mozzarella();
+
+    public Topping getMozzarella() {
+        Topping mozzarella = new Topping();
         mozzarella.setNome("mozzarella");
         mozzarella.setCalorie(10);
         mozzarella.setPrezzo(1);
@@ -86,9 +83,9 @@ public class AppConfig {
     }
 
     @Bean("pomodoro")
-    @Scope("prototype")
-    public Alimento getPomodoro() {
-        Alimento pomodoro = new Pomodoro();
+
+    public Topping getPomodoro() {
+        Topping pomodoro = new Topping();
         pomodoro.setNome("pomodoro");
         pomodoro.setCalorie(5);
         pomodoro.setPrezzo(0.5);
@@ -96,18 +93,19 @@ public class AppConfig {
     }
 
     @Bean("salame")
-    @Scope("prototype")
-    public Alimento getSalame() {
-        Alimento salame = new Salame();
+
+    public Topping getSalame() {
+        Topping salame = new Topping();
         salame.setNome("salame");
         salame.setCalorie(20);
         salame.setPrezzo(2);
         return salame;
     }
+
     @Bean("uovo")
-    @Scope("prototype")
-    public Alimento getUovo() {
-        Alimento uovo = new Uovo();
+
+    public Topping getUovo() {
+        Topping uovo = new Topping();
         uovo.setNome("uovo");
         uovo.setCalorie(20);
         uovo.setPrezzo(2);
@@ -116,11 +114,12 @@ public class AppConfig {
 
 
     @Bean("menu")
-    @Scope("prototype")
-    public List<Alimento> menu() {
 
-        List<Alimento> menu = List.of(getPizza1(), getPizza2(), getPizza3(), getBevanda1(), getBevanda2(), getBevanda3(), getUovo(), getSalame(), getMozzarella(),getPomodoro());
-
+    public Menu menu() {
+        Menu menu = new Menu();
+        menu.setBevande(List.of(getBevanda1(),getBevanda2(),getBevanda3()));
+        menu.setToppings(List.of(getSalame(),getMozzarella(),getPomodoro(),getUovo()));
+        menu.setPizze(List.of(getMargherita(),getDiavola(),capricciosa()));
         return menu;
     }
 }
