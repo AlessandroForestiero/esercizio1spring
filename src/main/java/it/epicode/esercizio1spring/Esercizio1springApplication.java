@@ -17,7 +17,7 @@ public class Esercizio1springApplication {
 		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
 	    Menu menu = (Menu) ctx.getBean("menu");
 		menu.stampaMenu();
-		;
+
 	}
 
 }

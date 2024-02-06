@@ -1,13 +1,16 @@
 package it.epicode.esercizio1spring;
 
 import it.epicode.esercizio1spring.bean.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 
 import java.util.List;
 
 @Configuration
+@PropertySource("application.properties")
 public class AppConfig {
     @Bean("margherita")
     @Scope("prototype")
@@ -27,7 +30,7 @@ public class AppConfig {
         pizza.setNome("diavola");
         pizza.setCalorie(pizza.getCalorie() + getSalame().getCalorie());
         pizza.setPrezzo(pizza.getPrezzo() + getSalame().getPrezzo());
-        pizza.getToppings().add(getSalame());
+        //pizza.getToppings().add(getSalame());
         return pizza;
     }
 
@@ -38,7 +41,7 @@ public class AppConfig {
         pizza.setNome("capricciosa");
         pizza.setCalorie(pizza.getCalorie() + getUovo().getCalorie());
         pizza.setPrezzo(pizza.getPrezzo() + getUovo().getPrezzo());
-        pizza.getToppings().add(getUovo());
+        //pizza.getToppings().add(getUovo());
         return pizza;
     }
 
@@ -117,9 +120,27 @@ public class AppConfig {
 
     public Menu menu() {
         Menu menu = new Menu();
-        menu.setBevande(List.of(getBevanda1(),getBevanda2(),getBevanda3()));
         menu.setToppings(List.of(getSalame(),getMozzarella(),getPomodoro(),getUovo()));
+        menu.setBevande(List.of(getBevanda1(),getBevanda2(),getBevanda3()));
         menu.setPizze(List.of(getMargherita(),getDiavola(),capricciosa()));
         return menu;
+    }
+    @Bean("tavolo1")
+    public Tavolo tavolo1(@Value("${tavolo1.coperto}") String coperto){
+        Tavolo  tavolo = new Tavolo();
+        tavolo.setNumero(1);
+        tavolo.setStatoTavolo(StatoTavolo.LIBERO);
+        tavolo.setNumeroMaxCoperti(6);
+        tavolo.setCostoCoperto(Double.parseDouble(coperto));
+        return tavolo;
+    }
+    @Bean("tavolo2")
+    public Tavolo tavolo2(@Value("${tavolo2.coperto}") String coperto){
+        Tavolo  tavolo = new Tavolo();
+        tavolo.setNumero(2);
+        tavolo.setStatoTavolo(StatoTavolo.LIBERO);
+        tavolo.setNumeroMaxCoperti(8);
+        tavolo.setCostoCoperto(Double.parseDouble(coperto));
+        return tavolo;
     }
 }
